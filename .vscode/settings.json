@@ -1,18 +1,17 @@
 {
   "latex-workshop.latex.autoBuild.run": "onSave",
-  "latex-workshop.latex.recipe.default": "latexmk",
+  "latex-workshop.latex.recipe.default": "pdflatex",
   "latex-workshop.latex.recipes": [
     {
-      "name": "latexmk",
-      "tools": ["latexmk"]
+      "name": "pdflatex",
+      "tools": ["pdflatex", "pdflatex"]
     }
   ],
   "latex-workshop.latex.tools": [
     {
-      "name": "latexmk",
-      "command": "latexmk",
+      "name": "pdflatex",
+      "command": "pdflatex",
       "args": [
-        "-pdf",
         "-synctex=1",
         "-interaction=nonstopmode",
         "-file-line-error",
