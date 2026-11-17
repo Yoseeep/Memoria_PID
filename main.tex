@@ -11,10 +11,13 @@
 %% Useful packages
 \usepackage{amsmath} % Añade herramientas y comandos avanzados para escribir fórmulas y ecuaciones matemáticas complejas.
 \usepackage{graphicx} % Permite insertar y manipular imágenes en el documento.
-\usepackage[colorinlistoftodos]{todonotes} % Facilita añadir notas o tareas pendientes ("TODOs") en los márgenes del documento mientras trabajas.
+% \usepackage[colorinlistoftodos]{todonotes} % Facilita añadir notas o tareas pendientes ("TODOs") en los márgenes del documento mientras trabajas.
 \usepackage[colorlinks=true, allcolors=blue]{hyperref} % Convierte las referencias, citas y el índice en enlaces clicables, y permite añadir enlaces a páginas web externas.
 
-
+%% Bibliography management
+\usepackage{csquotes} % Proporciona comandos para manejar citas y comillas de manera consistente, especialmente útil cuando se trabaja con bibliografía y estilos de citación.
+\usepackage[backend=biber, style=numeric]{biblatex} % Permite gestionar la bibliografía y las citas de manera avanzada, con soporte para diferentes estilos de citación. El backend "biber" se encarga de procesar la bibliografía.
+\addbibresource{referencias.bib} 
 
 \title{Un resolvedor codicioso totalmente automatizado para rompecabezas de piezas rectangulares irregulares y rotadas}
 \author{José Manuel García Vergara, Jiahao Li, Fernanda Canales Martínez}
@@ -134,7 +137,7 @@ Estructura de la documentación:
 Se puede usar el fichero \url{main.tex} disponible en enseñanza virtual como plantilla de Latex\footnote{Véase el Anexo para algunos apuntes rápidos sobre escritura de textos en LaTex (tomados de \url{Overleaf.com}.}, que es el que se ha usado en este documento. Se recomienda el uso de editores online de LaTeX como \url{Overleaf.com}, aunque a día de hoy, la versión gratuita sólo permite dos colaboradores.
 
 Las referencias se citan así:
-bla, bla \cite{clave:revista}, bla, bla \cite{clave:libro}. La bibliografía
+bla, bla \cite{articulopomeranz}, bla, bla \cite{nuestrorepo}. La bibliografía
 debe seguir el estilo de este documento, con las referencias ordenadas alfabéticamente por autores.
 
 También se puede documentar el trabajo en un Notebook de Jupyter, en el que también se puede incluir código LaTex e imprimirlo como pdf.
@@ -220,6 +223,39 @@ Se debe justificar el trabajo realizado por cada componente del grupo, indicando
 \end{tabular}
 \end{center}
 
+\nocite{*}
+\printbibliography[title={Referencias}]
+
+Ejemplo de citación \cite{articulopomeranz} y referencias \cite{nuestrorepo}.
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%% COSAS ANTERIORES ----------------------------------------
 
 \begin{thebibliography}{10}
 

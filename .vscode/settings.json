@@ -1,10 +1,17 @@
 {
   "latex-workshop.latex.autoBuild.run": "onSave",
-  "latex-workshop.latex.recipe.default": "pdflatex",
+  "latex-workshop.latex.recipe.default": "first",
+  "latex-workshop.message.warning.show": false,
+  "latex-workshop.message.badbox.show": false,
   "latex-workshop.latex.recipes": [
     {
-      "name": "pdflatex",
-      "tools": ["pdflatex", "pdflatex"]
+      "name": "pdflatex ➞ biber ➞ pdflatex x2",
+      "tools": [
+        "pdflatex",
+        "biber",
+        "pdflatex",
+        "pdflatex"
+      ]
     }
   ],
   "latex-workshop.latex.tools": [
@@ -16,6 +23,13 @@
         "-interaction=nonstopmode",
         "-file-line-error",
         "%DOC%"
+      ]
+    },
+    {
+      "name": "biber",
+      "command": "biber",
+      "args": [
+        "%DOCFILE%"
       ]
     }
   ],
