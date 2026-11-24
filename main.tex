@@ -43,6 +43,9 @@ PID, puzzle, solver, algoritmia, procesamiento de imágenes.
 
 \section{Introducción}
 
+
+---------
+
 El trabajo de PID debe ser un trabajo de {\bf 50 horas por persona}, que sirva para profundizar en algunos aspectos del procesamiento de imágenes {\bf no vistos en clase}. Se debe trabajar sobre un tema concreto de procesamiento de imágenes {\bf apoyándose en artículo(s) de investigación} relativamente reciente(s) o en {\bf capítulos de libros científicos}.
 
 El objetivo de los trabajos dirigidos consiste en explicar algún método o algoritmo de procesamiento de imágenes de una forma {\bf didáctica}, tanto teóricamente como de forma práctica. Es decir, 
@@ -58,6 +61,37 @@ Los trabajos se realizarán en grupos de trabajo preferiblemente de {\bf tres} p
 Se recomienda usar alguna herramienta de planificación y gestión de proyectos para hacer una planificación inicial y un seguimiento posterior del desarrollo del trabajo, registrando las tareas realizadas por cada uno (y el tiempo empleado). Téngase en cuenta que las horas de dedicación de \textbf{cada alumno/a} han de ser \textbf{50 horas}. Será obligatorio presentar los tiempos realizados {\bf individualmente en cada sesión de seguimiento.}
 
 \section{Planteamiento teórico}
+
+\subsection{Representación del espacio de color y extracción de características}
+\label{representaciondelespaciodecoloryextracciondecaracteristicas}
+
+La elección del espacio de color es determinante para modelar la compatibilidad visual entre los píxeles de la imagen. 
+Aunque se capturan comúnmente en el espacio RGB, este carece de uniformidad perceptiva: una distancia euclídea en RGB no se corresponde
+con la diferencia cromática percibida por el sistema visual humano.
+
+Por esta razón, el sistema realiza una conversión al espacio de color \textit{CIE LAB}, donde el canal \textit{L} codifica la luminancia perceptiva 
+y los canales \textit{A} y \textit{B} representan las dimensiones cromáticas oponentes (verde-rojo y azul-amarillo, respectivamente). Esta descomposición
+desacopla la información de brillo de las variaciones cromáticas, permitiendo que la métrica de compatibilidad opere en una representación perceptual linealizada.
+
+A diferencia del paper de referencia \cite{articulopomeranz}, en este proyecto no se hace uso de un espacio \textit{CIE LAB normalizado} ya que 
+no resulta útil (véase \ref{cielabVSnormalizado} y \ref{invarianteCompatibilidad}).
+
+
+\subsection{Métrica de disimilitud de bordes predictiva}
+
+\subsection{Conversión a compatibilidad mediante normalizadión adaptativa por cuartil}
+
+\subsection{Relaciones de máxima confianza recíproca: Best Buddies}
+
+\subsection{El colocador voraz: The Placer}
+
+\subsection{Extracción de componentes conexas y refinamiento iterativo: Segmenter y Shifter}
+
+
+
+
+
+-----
 
 La sección \textit{Planteamiento teórico} debe plantear el problema a resolver, así como describir los algoritmos propuestos para su resolución. 
 
@@ -178,6 +212,7 @@ Siempre se debe redactar un fichero {\bf Leeme explicando todo lo necesario para
 
 \section{Experimentación}
 \subsection{CIE LAB [0,255] vs CIE LAB normalizado [0,1]}
+\label{cielabVSnormalizado}
 
 Se puede demostrar matemáticamente que la Compatibilidad es invariante ante un escalado uniforme. Ver \ref{invarianteCompatibilidad}.
 
