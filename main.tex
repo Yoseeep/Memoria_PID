@@ -26,14 +26,18 @@
 \maketitle
 
 \begin{abstract}
- \noindent El resumen debe tener como máximo 250 palabras y ser un único párrafo. El resumen debe describir lo más fielmente posible el trabajo realizado (no el propuesto inicialmente, que podría ser distinto). 
- En esta plantilla se presentan las indicaciones para realizar el trabajo de PID, al mismo tiempo que la estructura que debe tener la documentación a presentar. 
+\noindent Este trabajo presenta el estudio, diseño, implementación y experimentación de un sistema totalmente automatizado para la resolución de rompecabezas digitales
+(\textit{jigsaw puzzle solver}), tomando como fundamento teórico el modelo codicioso iterativo propuesto por Pomeranz, Sheffer y Truyen (CVPR 2011).
+---TODO---
+
+%% \noindent El resumen debe tener como máximo 250 palabras y ser un único párrafo. El resumen debe describir lo más fielmente posible el trabajo realizado (no el propuesto inicialmente, que podría ser distinto). 
+%% En esta plantilla se presentan las indicaciones para realizar el trabajo de PID, al mismo tiempo que la estructura que debe tener la documentación a presentar. 
 
 \hspace{1cm}
 
 \noindent \textbf{Palabras clave:} 
 %(hasta cinco palabras que clasifiquen el trabajo) 
-PID, instrucciones, trabajo en grupo, procesamiento de imágenes.
+PID, puzzle, solver, algoritmia, procesamiento de imágenes.
 \end{abstract}
 
 
@@ -173,6 +177,9 @@ Siempre se debe redactar un fichero {\bf Leeme explicando todo lo necesario para
 
 
 \section{Experimentación}
+\subsection{CIE LAB [0,255] vs CIE LAB normalizado [0,1]}
+
+Se puede demostrar matemáticamente que la Compatibilidad es invariante ante un escalado uniforme. Ver \ref{invarianteCompatibilidad}.
 
 Una sección de ejemplos comentados y pruebas realizadas con la implementación desarrollada es {\textit imprescindible} en este trabajo. Si existen distintos parámetros que intervienen en el método, se deben comprender y experimentar con ellos. También puede ser de interés probar distintos tipos de imágenes dentro del contexto del trabajo. Igualmente importantes (o más) serán las conclusiones que se puedan obtener de la experimentación realizada. 
 
@@ -231,6 +238,7 @@ Ejemplo de citación \cite{articulopomeranz} y referencias \cite{nuestrorepo}.
 
 \section{Apéndice}
 \subsection{¿Por qué la compatibilidad es invariante ante un escalado uniforma?. Demostración matemática}
+\label{invarianteCompatibilidad}
 Si escalamos la imagen por un factor $\alpha > 0$ (por ejemplo $\alpha = \frac{1}{255}$):
 
 \begin{enumerate}
