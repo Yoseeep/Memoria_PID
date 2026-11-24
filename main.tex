@@ -228,6 +228,38 @@ Se debe justificar el trabajo realizado por cada componente del grupo, indicando
 
 Ejemplo de citación \cite{articulopomeranz} y referencias \cite{nuestrorepo}.
 
+
+\section{Apéndice}
+\subsection{¿Por qué la compatibilidad es invariante ante un escalado uniforma?. Demostración matemática}
+Si escalamos la imagen por un factor $\alpha > 0$ (por ejemplo $\alpha = \frac{1}{255}$):
+
+\begin{enumerate}
+    \item \textit{Predicción de Taylor:} Escala linealmente:
+    \[
+    \text{Pred}' = 2(\alpha B_1) - \alpha B_2 = \alpha(2B_1 - B_2) = \alpha \, \text{Pred}
+    \]
+    
+    \item \textit{Diferencias fraccionarias con norma $p = 0.3$:}
+    \[
+    |\text{Pred}' - \text{Ext}'|^p = |\alpha(\text{Pred} - \text{Ext})|^p = \alpha^p |\text{Pred} - \text{Ext}|^p
+    \]
+    
+    \item \textit{Disimilitud con exponente externo $q = 5/24$:}
+    \[
+    D' = \left( \sum \alpha^p (\dots) \right)^q = \left( \alpha^p \sum (\dots) \right)^q = \alpha^{p \cdot q} D
+    \]
+    Toda la matriz de disimilitud queda multiplicada por el escalar constante $\alpha^{p \cdot q}$.
+    
+    \item \textit{Normalización por cuartil:} El percentil 25 de la fila queda multiplicado por el mismo factor: $\text{quartile}' = \alpha^{p \cdot q} \, \text{quartile}$.
+    
+    \item \textit{Cálculo de la Compatibilidad:}
+    \[
+    C' = \exp\left( -\frac{D'}{\text{quartile}'} \right) = \exp\left( -\frac{\alpha^{p \cdot q} D}{\alpha^{p \cdot q} \, \text{quartile}} \right) = \exp\left( -\frac{D}{\text{quartile}} \right) = C
+    \]
+\end{enumerate}
+
+El factor de escala \textit{se cancela exactamente} en el exponente.
+
 \end{document}
 
 
@@ -255,7 +287,7 @@ Ejemplo de citación \cite{articulopomeranz} y referencias \cite{nuestrorepo}.
 
 
 
-%% COSAS ANTERIORES ----------------------------------------
+%% COSAS ANTERIORES ------------------------------------------------------------------------------------------------------------------------
 
 \begin{thebibliography}{10}
 
