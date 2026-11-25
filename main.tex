@@ -10,9 +10,11 @@
 
 %% Useful packages
 \usepackage{amsmath,amsthm,amssymb} % Añade herramientas y comandos avanzados para escribir fórmulas y ecuaciones matemáticas complejas.
+\usepackage{bm} % Escribir texto matemático en negrita
 \usepackage{graphicx} % Permite insertar y manipular imágenes en el documento.
 % \usepackage[colorinlistoftodos]{todonotes} % Facilita añadir notas o tareas pendientes ("TODOs") en los márgenes del documento mientras trabajas.
 \usepackage[colorlinks=true, allcolors=blue]{hyperref} % Convierte las referencias, citas y el índice en enlaces clicables, y permite añadir enlaces a páginas web externas.
+\usepackage{booktabs} % 
 
 %% Definición del entorno para proposiciones
 \theoremstyle{plain} % Estilo por defecto: título en negrita, cuerpo en cursiva
@@ -78,7 +80,7 @@ y los canales \textit{A} y \textit{B} representan las dimensiones cromáticas op
 desacopla la información de brillo de las variaciones cromáticas, permitiendo que la métrica de compatibilidad opere en una representación perceptual linealizada.
 
 A diferencia del paper de referencia \cite{articulopomeranz}, en este proyecto no se hace uso de un espacio \textit{CIE LAB normalizado} ya que 
-no resulta útil (véase \ref{cielabVSnormalizado} y \ref{invarianteCompatibilidad}).
+no resulta útil (véase \ref{expEspaciosColor} y \ref{invarianteCompatibilidad}).
 
 
 \subsection{Métrica de disimilitud de bordes predictiva}
@@ -140,18 +142,6 @@ Seguimiento 2  & Primera versión de la implementación y de la documentación. 
 Los días dedicados a Seguimiento aparecen en el Calendario publicado en ev. Cada grupo tendrá que agendar con la profesora al menos 3 reuniones para los seguimientos obligatorios.
 
 \textbf{Todos} los miembros del grupo deberán \textbf{intervenir en la exposición final}, en la que deberán defender su trabajo y comentar los logros teóricos y de implementación obtenidos. Además, deberá hacerse algún ejemplo usando la implementación desarrollada (\textbf{20 minutos en total}). Las exposiciones se realizarán en horario de clase en las dos últimas semanas. Después se abrirá un turno de preguntas.
-
-  %  En la siguiente tabla se muestran las fechas de  \textbf{las exposiciones de cada grupo}. Las exposiones se realizarán en horario de clase.
-
-%\begin{center}
-%    \begin{tabular}{|c||r|r|}
-%    \hline
-%     &Grupos 1,2,3 & Grupos 4,5,6\\
-%    \hline\hline
-%  Fecha de la exposición & 8 de junio & 9 de junio \\
-%\hline
-%    \end{tabular}
-%    \end{center}
 
 Para la entrega, cada grupo deberá subir, en respuesta a una actividad creada para tal efecto en la ev, los siguientes elementos:
 
@@ -215,13 +205,43 @@ Siempre se debe redactar un fichero {\bf Leeme explicando todo lo necesario para
 
 
 \section{Experimentación}
-\subsection{CIE LAB [0,255] vs CIE LAB normalizado [0,1]}
-\label{cielabVSnormalizado}
+\subsection{Espacios de color, normalización y ratios discriminativos}
+\label{expEspaciosColor}
+En primer lugar, evaluamos empíricamente sobre el puzzle de Lisboa de 150 piezas la capacidad del sistema bajo cuatro modalidades de preprocesamiento en el espacio LAB:
 
-Se puede demostrar matemáticamente que la Compatibilidad es invariante ante un escalado uniforme. Ver \ref{invarianteCompatibilidad}.
+\begin{itemize}
+    \item \textbf{Método 1 (Actual - OpenCV uint8):} Representación nativa con $L, A, B \in [0, 255]$.
+    \item \textbf{Método 2 (Escalado uniforme $\bm{[0, 1]}$):} Método 1 dividido por $255$.
+    \item \textbf{Método 3 (CIELAB Estándar):} Conversión en coma flotante con $L \in [0, 100]$ y $A, B \in [-127, 127]$.
+    \item \textbf{Método 4 (CIELAB Normalizado por canal):} $L/100$, $(A + 127)/254$, $(B + 127)/254$.
+\end{itemize}
 
-Una sección de ejemplos comentados y pruebas realizadas con la implementación desarrollada es {\textit imprescindible} en este trabajo. Si existen distintos parámetros que intervienen en el método, se deben comprender y experimentar con ellos. También puede ser de interés probar distintos tipos de imágenes dentro del contexto del trabajo. Igualmente importantes (o más) serán las conclusiones que se puedan obtener de la experimentación realizada. 
+Para medir la capacidad de discriminación, definimos el \textit{Ratio Discriminativo} como el cociente entre la compatibilidad media de los pares vecinos reales del Ground Truth y la compatibilidad media con los candidatos falsos:
 
+\begin{equation*}
+    R_{\text{disc}} = \frac{\mathbb{E}[C(\text{vecinos reales})]}{\mathbb{E}[C(\text{vecinos espurios})]}
+\end{equation*}
+
+
+\textbf{Análisis de resultados:} Como se observa en el Cuadro \ref{tab:comparativa_lab}, el Método 1 y el Método 2 ofrecen resultados exactamente equivalentes (discrepancia numérica máxima de $6'17 \times 10^{-7}$, 
+producto del redondeo de coma flotante). A raíz de este dato, surgió la hipótesis de invarianza de escala que se demuestra matemáticamente en el apéndice \ref{invarianteCompatibilidad}. Además, la representación nativa de OpenCV proporciona una 
+relación señal-ruido superior ($R_{\text{disc}} = 1'2219$), superando a las variantes estandarizadas.
+
+\begin{table}[htbp]
+\centering
+\caption{Comparativa de representaciones en el espacio LAB (Lisboa $10 \times 15$, 150 piezas, 550 bordes dirigidos).}
+\label{tab:comparativa_lab}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Método de representación} & \textbf{Top-1 (\%)} & \textbf{Aciertos} & \textbf{Precisión BB (\%)} & \textbf{Ratio $R_{\text{disc}}$} \\
+\midrule
+Método 1 (OpenCV nativo uint8) & \textbf{99.64\%} & \textbf{548/550} & \textbf{99.64\% (546/548)} & \textbf{1.2219} \\
+Método 2 (Escalado uniforme $[0,1]$) & \textbf{99.64\%} & \textbf{548/550} & \textbf{99.64\% (546/548)} & \textbf{1.2219} \\
+Método 3 (CIELAB estándar float) & 99.45\% & 547/550 & 99.45\% (545/548) & 1.2042 \\
+Método 4 (Normalizado por canal) & 99.27\% & 546/550 & 99.27\% (544/548) & 1.2013 \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \section{Manual de usuario}
 
