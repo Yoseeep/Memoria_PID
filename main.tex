@@ -19,6 +19,9 @@
 %% Definición del entorno para proposiciones
 \theoremstyle{plain} % Estilo por defecto: título en negrita, cuerpo en cursiva
 \newtheorem{prop}{Proposición}
+%% Definición del entorno para corolarios
+\theoremstyle{plain} % Estilo por defecto: título en negrita, cuerpo en cursiva
+\newtheorem{corol}{Corolario}
 
 %% Bibliography management
 \usepackage{csquotes} % Proporciona comandos para manejar citas y comillas de manera consistente, especialmente útil cuando se trabaja con bibliografía y estilos de citación.
@@ -363,6 +366,13 @@ $$C'(x_i, x_j, R) = \exp\left( -\frac{D(x_i, x_j, R)}{\text{quartile}(i, R)} \ri
 
 Quedando demostrada la proposición.     
 \end{proof}
+
+\begin{corol}
+Como consecuencia directa de este resultado, cualquier reescalado homogéneo de la representación de color (como mapear el rango discreto de intensidades estándar de OpenCV 
+$[0,255]$ al intervalo continuo $[0,1]$ mediante $\alpha = 1/255$) produce exactamente las mismas matrices de compatibilidad 
+$C$, preservando de forma idéntica los órdenes de clasificación (rankings), los máximos por fila (argmax) 
+y, por consiguiente, la totalidad de las relaciones recíprocas de Best Buddies.
+\end{corol}
 
 
 
