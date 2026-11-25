@@ -9,10 +9,14 @@
 \usepackage[a4paper,top=3cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=2cm]{geometry} % Define el tamaño de la página (A4) y los márgenes (superior, inferior, izquierdo y derecho).
 
 %% Useful packages
-\usepackage{amsmath} % Añade herramientas y comandos avanzados para escribir fórmulas y ecuaciones matemáticas complejas.
+\usepackage{amsmath,amsthm,amssymb} % Añade herramientas y comandos avanzados para escribir fórmulas y ecuaciones matemáticas complejas.
 \usepackage{graphicx} % Permite insertar y manipular imágenes en el documento.
 % \usepackage[colorinlistoftodos]{todonotes} % Facilita añadir notas o tareas pendientes ("TODOs") en los márgenes del documento mientras trabajas.
 \usepackage[colorlinks=true, allcolors=blue]{hyperref} % Convierte las referencias, citas y el índice en enlaces clicables, y permite añadir enlaces a páginas web externas.
+
+%% Definición del entorno para proposiciones
+\theoremstyle{plain} % Estilo por defecto: título en negrita, cuerpo en cursiva
+\newtheorem{prop}{Proposición}
 
 %% Bibliography management
 \usepackage{csquotes} % Proporciona comandos para manejar citas y comillas de manera consistente, especialmente útil cuando se trabaja con bibliografía y estilos de citación.
@@ -272,36 +276,76 @@ Ejemplo de citación \cite{articulopomeranz} y referencias \cite{nuestrorepo}.
 
 
 \section{Apéndice}
-\subsection{¿Por qué la compatibilidad es invariante ante un escalado uniforma?. Demostración matemática}
+\subsection{¿Por qué la compatibilidad es invariante ante un escalado uniforme?}
 \label{invarianteCompatibilidad}
-Si escalamos la imagen por un factor $\alpha > 0$ (por ejemplo $\alpha = \frac{1}{255}$):
 
-\begin{enumerate}
-    \item \textit{Predicción de Taylor:} Escala linealmente:
-    \[
-    \text{Pred}' = 2(\alpha B_1) - \alpha B_2 = \alpha(2B_1 - B_2) = \alpha \, \text{Pred}
-    \]
-    
-    \item \textit{Diferencias fraccionarias con norma $p = 0.3$:}
-    \[
-    |\text{Pred}' - \text{Ext}'|^p = |\alpha(\text{Pred} - \text{Ext})|^p = \alpha^p |\text{Pred} - \text{Ext}|^p
-    \]
-    
-    \item \textit{Disimilitud con exponente externo $q = 5/24$:}
-    \[
-    D' = \left( \sum \alpha^p (\dots) \right)^q = \left( \alpha^p \sum (\dots) \right)^q = \alpha^{p \cdot q} D
-    \]
-    Toda la matriz de disimilitud queda multiplicada por el escalar constante $\alpha^{p \cdot q}$.
-    
-    \item \textit{Normalización por cuartil:} El percentil 25 de la fila queda multiplicado por el mismo factor: $\text{quartile}' = \alpha^{p \cdot q} \, \text{quartile}$.
-    
-    \item \textit{Cálculo de la Compatibilidad:}
-    \[
-    C' = \exp\left( -\frac{D'}{\text{quartile}'} \right) = \exp\left( -\frac{\alpha^{p \cdot q} D}{\alpha^{p \cdot q} \, \text{quartile}} \right) = \exp\left( -\frac{D}{\text{quartile}} \right) = C
-    \]
-\end{enumerate}
+\begin{prop} [Invarianza de Escala]
+Sea $\alpha \in \mathbb{R}^+$ un factor de escala estrictamente positivo aplicado uniformemente sobre todos los canales y píxeles de las piezas del puzzle, tal que $x'_i = \alpha x_i$ para todo $i \in \{1, ..., N\}$. Entonces, la matriz de compatibilidad resultante $C'$ es idéntica a la matriz original $C$:
+$$C'(x_i, x_j, R) = C(x_i, x_j, R) \quad \forall i, j \in \{1, ..., N\}, \forall R \in \{\text{arriba}, \text{abajo}, \text{izquierda}, \text{derecha}\}$$
+\end{prop}
+\begin{proof}   
+% \textbf{Paso 1: Escalado de los descriptores de frontera y la predicción}
 
-El factor de escala \textit{se cancela exactamente} en el exponente.
+Al aplicar la transformación lineal $x'_i = \alpha x_i$, los vectores de frontera heredan directamente el factor de escala:
+$$B_1(x'_i, R) = \alpha B_1(x_i, R), \quad B_2(x'_i, R) = \alpha B_2(x_i, R)$$
+donde $B_1(x_i,R),B_2(x_i,R) \in \mathbb{R}^{K \times 3}$ son los píxeles de la frontera exterior misma de la pieza (la última línea de píxeles adyacentes a la pieza vecina) y
+los píxeles de la frontera interior contigua (la penúltima línea de píxeles), respectivamente.
+
+Por linealidad del operador de diferencias finitas, el vector de predicción de Taylor escala homogéneamente:
+\begin{align*}
+\text{Pred}(x'_i, R) &= 2B_1(x'_i, R) - B_2(x'_i, R) = 2(\alpha B_1(x_i, R)) - \alpha B_2(x_i, R) = \alpha(2B_1(x_i, R) - B_2(x_i, R)) \\
+&= \alpha \text{Pred}(x_i, R)
+\end{align*}
+
+% \textbf{Paso 2: Homogeneidad del término de error fraccionario}
+
+Evaluando la diferencia absoluta entre la predicción escalada y el borde exterior del candidato vecino:
+\begin{align*}
+|\text{Pred}(x'_i, R)_{k,c} - B_1(x'_j, R_{op})_{k,c}|^p &= |\alpha \text{Pred}(x_i, R)_{k,c} - \alpha B_1(x_j, R_{op})_{k,c}|^p \\
+&= |\alpha (\text{Pred}(x_i, R)_{k,c} - B_1(x_j, R_{op})_{k,c})|^p    
+\end{align*}
+donde $R_{op}$ es la dirección opuesta a $R$.
+
+
+Dado que $\alpha > 0$, aplicando la propiedad multiplicativa del valor absoluto $|a \cdot b| = |a| \cdot |b|$:
+$$|\alpha (\text{Pred}(x_i, R)_{k,c} - B_1(x_j, R_{op})_{k,c})|^p = \alpha^p |\text{Pred}(x_i, R)_{k,c} - B_1(x_j, R_{op})_{k,c}|^p$$
+
+El mismo desarrollo aplica de manera idéntica al término simétrico inverso de $x_j$ hacia $x_i$.
+
+% \textbf{Paso 3: Factorización de la disimilitud}
+
+Sustituyendo ambos términos escalados en la ecuación de disimilitud:
+$$D'(x_i, x_j, R) = \left[ \sum_{k=1}^{K} \sum_{c=1}^{3} \left( \alpha^p |\text{Pred}(x_i, R)_{k,c} - B_1(x_j, R_{op})_{k,c}|^p + \alpha^p |\text{Pred}(x_j, R_{op})_{k,c} - B_1(x_i, R)_{k,c}|^p \right) \right]^{\frac{1}{p}}$$
+
+Extrayendo $\alpha^p$ como factor común del doble sumatorio:
+$$D'(x_i, x_j, R) = \left[ \alpha^p \sum_{k=1}^{K} \sum_{c=1}^{3} \left( |\text{Pred}(x_i, R)_{k,c} - B_1(x_j, R_{op})_{k,c}|^p + |\text{Pred}(x_j, R_{op})_{k,c} - B_1(x_i, R)_{k,c}|^p \right) \right]^{\frac{1}{p}}$$
+
+Aplicando la propiedad de las potencias $(u \cdot v)^\gamma = u^\gamma \cdot v^\gamma$ con $\gamma = 1/p$:
+$$D'(x_i, x_j, R) = (\alpha^p)^{\frac{1}{p}} \cdot \left[ \sum_{k=1}^{K} \sum_{c=1}^{3} (...) \right]^{\frac{1}{p}} = \alpha \cdot D(x_i, x_j, R)$$
+
+Es decir, toda la matriz de disimilitud queda uniformemente escalada por la constante global $\alpha$.
+
+% \textbf{Paso 4: Propiedad de escala en estadísticos de orden (cuartil)}
+
+Sea $S_i = \{D(x_i, x_m, R) \mid m \neq i\}$ el conjunto de disimilitudes de la fila $i$. Al escalar todos sus elementos por la constante positiva $\alpha$, el conjunto transformado es $S'_i = \{\alpha \cdot d \mid d \in S_i\}$. Dado que la multiplicación por un escalar positivo es monótona creciente, preserva estrictamente el orden de los elementos. Por consiguiente, cualquier cuantil de orden $\tau \in [0, 1]$ cumple:
+$$Q_\tau(S'_i) = \alpha \cdot Q_\tau(S_i)$$
+
+En particular, para el primer cuartil ($\tau = 0.25$):
+$$\text{quartile}'(i, R) = \alpha \cdot \text{quartile}(i, R)$$
+
+% \textbf{Paso 5: Cancelación algebraica en el exponente de compatibilidad}
+
+Sustituyendo $D'$ y $\text{quartile}'$ en la formulación de compatibilidad:
+$$C'(x_i, x_j, R) = \exp\left( -\frac{D'(x_i, x_j, R)}{\text{quartile}'(i, R)} \right) = \exp\left( -\frac{\alpha \cdot D(x_i, x_j, R)}{\alpha \cdot \text{quartile}(i, R)} \right)$$
+
+Cancelando el factor común $\alpha \neq 0$ en el cociente del exponente:
+$$C'(x_i, x_j, R) = \exp\left( -\frac{D(x_i, x_j, R)}{\text{quartile}(i, R)} \right) = C(x_i, x_j, R)$$
+
+Quedando demostrada la proposición.     
+\end{proof}
+
+
+
 
 \end{document}
 
